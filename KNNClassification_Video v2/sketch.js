@@ -11,6 +11,7 @@ let video;
 // Create a KNN classifier
 const knnClassifier = ml5.KNNClassifier();
 let featureExtractor;
+var rock;
 
 function setup() {
 
@@ -28,10 +29,9 @@ function setup() {
 
 function draw() {
   background(204);
-  
-    let info = 90;
-    
-    if (info > 80) {
+  console.log(rock);
+
+    if (rock > 80) {
         
         ellipse(500, 60, 90, 90);
         strokeWeight(10);
@@ -165,7 +165,6 @@ function gotResults(err, result) {
   if (err) {
     console.error(err);
   }
-
   if (result.confidencesByLabel) {
     const confidences = result.confidencesByLabel;
     // result.label is the label that has the highest confidence
@@ -173,6 +172,15 @@ function gotResults(err, result) {
       select('#result').html(result.label);
       select('#confidence').html(`${confidences[result.label] * 100} %`);
     }
+
+	// console.log(confidences['Attention']*100);
+	// console.log(confidences['Good']*100);
+	// console.log(confidences['Great']*100);
+	//console.log(confidences['Rock']*100);
+  // console.log(confidences['Stop']*100);
+  window.rock = confidences['Rock'] * 100 ;
+  
+  // console.log(rock);
 
     select('#confidenceAttention').html(`${confidences['Attention'] ? confidences['Attention'] * 100 : 0} %`);
     select('#confidenceGood').html(`${confidences['Good'] ? confidences['Good'] * 100 : 0} %`);
@@ -182,6 +190,7 @@ function gotResults(err, result) {
   }
 
   classify();
+  
   
 }
 
@@ -217,3 +226,4 @@ function saveMyKNN() {
 function loadMyKNN() {
   knnClassifier.load('./myKNNDataset.json', updateCounts);
 }
+
