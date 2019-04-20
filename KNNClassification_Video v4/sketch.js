@@ -12,18 +12,13 @@ let video;
 const knnClassifier = ml5.KNNClassifier();
 let featureExtractor;
 var rock;
-var attention;
-var good;
-var great;
-var stop;
-let angle = 0.0;
-let jitter = 0.0;
 
 function setup() {
 
   // Create a featureExtractor that can extract the already learned features from MobileNet
   featureExtractor = ml5.featureExtractor('MobileNet', modelReady);
   createCanvas(720,400);
+  background(51);
   //noCanvas();
   // Create a video element
   video = createCapture(VIDEO);
@@ -31,29 +26,15 @@ function setup() {
   video.parent('videoContainer');
   // Create the UI buttons
   createButtons();
-
-  rectMode(CENTER); // https://p5js.org/examples/transform-rotate.html
+  img = loadImage('images/meterFull.png'); // Load the image
+  
 }
 
 function draw() {
-  console.log(rock);
-  background(51); // code from https://p5js.org/examples/transform-rotate.html
-
-  // during even-numbered seconds (0, 2, 4, 6...) add jitter to
-  // the rotation
-  if (second() % 2 === 0) {
-    jitter = random(-0.1, 0.1);
-  }
-  //increase the angle value using the most recent jitter value
-  angle = angle + jitter;
-  //use cosine to get a smooth CW and CCW motion when not jittering
-  let c = cos(rock);
-  //move the shape to the center of the canvas
-  translate(width / 2, height / 2);
-  //apply the final rotation
-  rotate(c);
-  rect(0, 0, 180, 180);
   
+  console.log(rock);
+  image(img, 150, 100);
+    
 }
 
 function modelReady(){
@@ -196,7 +177,7 @@ function gotResults(err, result) {
 	// console.log(confidences['Great']*100);
 	//console.log(confidences['Rock']*100);
   // console.log(confidences['Stop']*100);
-  window.rock = round(confidences['Rock'] * 100) ;
+  window.rock = confidences['Rock'] * 100 ;
   
   // console.log(rock);
 
